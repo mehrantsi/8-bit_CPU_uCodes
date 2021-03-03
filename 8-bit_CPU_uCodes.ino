@@ -20,7 +20,7 @@
 #define CE  0b0000000000001000  // Program counter enable
 #define CO  0b0000000000000100  // Program counter out
 #define J   0b0000000000000010  // Jump (program counter in)
-#define FI  0b0000000000000001  // Flags in
+#define FI  0b0000000000000001  // Flags in -> tie FI to EO and make this RST
 
 #define FLAGS_Z0C0 0
 #define FLAGS_Z0C1 1
