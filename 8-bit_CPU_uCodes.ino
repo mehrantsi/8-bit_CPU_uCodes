@@ -27,11 +27,11 @@
 #define FLAGS_Z1C0 2
 #define FLAGS_Z1C1 3
 
-#define JC  0b0111
-#define JZ  0b1000
+#define JC  0b1000
+#define JZ  0b1001
 
 const PROGMEM uint16_t UCODE_TEMPLATE[16][8] = {
-  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, RST,    0,      0,          0           }, // 0000 - NOP
+  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, RST,    0,      0,          0           }, // 0000 - NOP/<Fetch>
   { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, IO|MI,  RO|AI,  RST,        0           }, // 0001 - LDA
   { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, IO|MI,  RO|BI,  EOFI|AI,    0           }, // 0010 - ADD
   { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, IO|MI,  RO|BI,  EOFI|AI|SU, 0           }, // 0011 - SUB
