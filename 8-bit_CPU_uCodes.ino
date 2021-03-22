@@ -31,22 +31,22 @@
 #define JZ  0b1001
 
 const PROGMEM uint16_t UCODE_TEMPLATE[16][8] = {
-  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, RST,    0,      0,          0           }, // 0000 - NOP/<Fetch>
-  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, IO|MI,  RO|AI,  RST,        0           }, // 0001 - LDA
-  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, IO|MI,  RO|BI,  EOFI|AI,    0           }, // 0010 - ADD
-  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, IO|MI,  RO|BI,  EOFI|AI|SU, 0           }, // 0011 - SUB
-  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, IO|MI,  AO|RI,  RST,        0           }, // 0100 - STA
-  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, IO|AI,  0,      0,          0           }, // 0101 - LDI
-  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, IO|AI,  MI|CO,  RO|MI|CE,   AO|RI       }, // 0110 - LDS
-  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, IO|J,   RST,    0,          0           }, // 0111 - JMP
-  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, 0,      RST,    0,          0           }, // 1000 - JC
-  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, 0,      RST,    0,          0           }, // 1001 - JZ
-  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, IO|MI,  RO|BI,  EOFI|RI,    EOFI|AI     }, // 1010 - ADS
-  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, IO|MI,  RO|BI,  EOFI|RI|SU, EOFI|AI|SU  }, // 1011 - SUS
-  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, 0,      0,      0,          0           }, // 1100
-  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, 0,      0,      0,          0           }, // 1101
-  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, IO|MI,  RO|OI,  HLT,        0           }, // 1110 - OTH
-  { MI|CO,  RO|II|CE, MI|CO,  RO|II|CE, AO|OI,  RST,    0,          0           }, // 1111 - OUT
+  { MI|CO,  RO|II|CE,   MI|CO,          RO|II|CE,       RST,        0,          0,          0           }, // 0000 - NOP/<Fetch>
+  { IO|MI,  RO|AI,      RST,            0,              0,          0,          0,          0           }, // 0001 - LDA
+  { IO|MI,  RO|BI,      EOFI|AI,        RST,            0,          0,          0,          0           }, // 0010 - ADD
+  { IO|MI,  RO|BI,      EOFI|AI|SU,     RST,            0,          0,          0,          0           }, // 0011 - SUB
+  { IO|MI,  AO|RI,      RST,            0,              0,          0,          0,          0           }, // 0100 - STA
+  { IO|AI,  RST,        0,              0,              0,          0,          0,          0           }, // 0101 - LDI
+  { IO|AI,  MI|CO,      RO|MI|CE,       AO|RI,          RST,        0,          0,          0           }, // 0110 - LDS
+  { IO|J,   RST,        0,              0,              0,          0,          0,          0           }, // 0111 - JMP
+  { 0,      RST,        0,              0,              0,          0,          0,          0           }, // 1000 - JC
+  { 0,      RST,        0,              0,              0,          0,          0,          0           }, // 1001 - JZ
+  { IO|MI,  RO|BI,      EOFI|RI,        EOFI|AI,        RST,        0,          0,          0           }, // 1010 - ADS
+  { IO|MI,  RO|BI,      EOFI|RI|SU,     EOFI|AI|SU,     RST,        0,          0,          0           }, // 1011 - SUS
+  { RST,    0,          0,              0,              0,          0,          0,          0           }, // 1100
+  { RST,    0,          0,              0,              0,          0,          0,          0           }, // 1101
+  { IO|MI,  RO|OI,      HLT,            RST,            0,          0,          0,          0           }, // 1110 - OTH
+  { AO|OI,  RST,        0,              0,              0,          0,          0,          0           }, // 1111 - OUT
 };
 
 uint16_t ucode[4][16][8];
@@ -57,16 +57,16 @@ void initUCode() {
 
   // ZF = 0, CF = 1
   memcpy_P(ucode[FLAGS_Z0C1], UCODE_TEMPLATE, sizeof(UCODE_TEMPLATE));
-  ucode[FLAGS_Z0C1][JC][4] = IO|J;
+  ucode[FLAGS_Z0C1][JC][0] = IO|J;
 
   // ZF = 1, CF = 0
   memcpy_P(ucode[FLAGS_Z1C0], UCODE_TEMPLATE, sizeof(UCODE_TEMPLATE));
-  ucode[FLAGS_Z1C0][JZ][4] = IO|J;
+  ucode[FLAGS_Z1C0][JZ][0] = IO|J;
 
   // ZF = 1, CF = 1
   memcpy_P(ucode[FLAGS_Z1C1], UCODE_TEMPLATE, sizeof(UCODE_TEMPLATE));
-  ucode[FLAGS_Z1C1][JC][4] = IO|J;
-  ucode[FLAGS_Z1C1][JZ][4] = IO|J;
+  ucode[FLAGS_Z1C1][JC][0] = IO|J;
+  ucode[FLAGS_Z1C1][JZ][0] = IO|J;
 }
 
 /*
