@@ -140,7 +140,6 @@ void printContents(int start, int length) {
 
 
 void setup() {
-  // put your setup code here, to run once:
   initUCode();
 
   pinMode(SHIFT_DATA, OUTPUT);
@@ -181,6 +180,5 @@ void setup() {
 
 
 void loop() {
-  // put your main code here, to run repeatedly:
 
 }
